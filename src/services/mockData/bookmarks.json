@@ -1,0 +1,202 @@
+[
+  {
+    "Id": 1,
+    "title": "GitHub - The world's leading software development platform",
+    "url": "https://github.com",
+    "folder": "Development",
+    "dateAdded": "2024-01-15T10:30:00Z",
+    "status": "active"
+  },
+  {
+    "Id": 2,
+    "title": "GitHub",
+    "url": "https://github.com/",
+    "folder": "Bookmarks Bar",
+    "dateAdded": "2024-02-01T14:20:00Z",
+    "status": "duplicate"
+  },
+  {
+    "Id": 3,
+    "title": "Stack Overflow - Where Developers Learn",
+    "url": "https://stackoverflow.com",
+    "folder": "Development",
+    "dateAdded": "2024-01-20T09:15:00Z",
+    "status": "active"
+  },
+  {
+    "Id": 4,
+    "title": "Old Portfolio Site",
+    "url": "https://myoldsite-404-example.com",
+    "folder": "Personal",
+    "dateAdded": "2023-08-10T16:45:00Z",
+    "status": "dead"
+  },
+  {
+    "Id": 5,
+    "title": "React Documentation",
+    "url": "https://react.dev",
+    "folder": "Development",
+    "dateAdded": "2024-01-05T11:00:00Z",
+    "status": "active"
+  },
+  {
+    "Id": 6,
+    "title": "React Docs",
+    "url": "https://react.dev/",
+    "folder": "Learning",
+    "dateAdded": "2024-01-25T13:30:00Z",
+    "status": "duplicate"
+  },
+  {
+    "Id": 7,
+    "title": "Tailwind CSS",
+    "url": "https://tailwindcss.com",
+    "folder": "Development",
+    "dateAdded": "2024-01-12T15:20:00Z",
+    "status": "active"
+  },
+  {
+    "Id": 8,
+    "title": "Broken News Site",
+    "url": "https://nonexistent-news-site-404.com",
+    "folder": "News",
+    "dateAdded": "2023-12-15T08:30:00Z",
+    "status": "dead"
+  },
+  {
+    "Id": 9,
+    "title": "MDN Web Docs",
+    "url": "https://developer.mozilla.org",
+    "folder": "Development",
+    "dateAdded": "2024-01-08T12:10:00Z",
+    "status": "active"
+  },
+  {
+    "Id": 10,
+    "title": "Mozilla Developer Network",
+    "url": "https://developer.mozilla.org/",
+    "folder": "References",
+    "dateAdded": "2024-02-10T10:45:00Z",
+    "status": "duplicate"
+  },
+  {
+    "Id": 11,
+    "title": "Dead Company Blog",
+    "url": "https://oldcompanyblog-shutdown.com",
+    "folder": "Business",
+    "dateAdded": "2023-09-20T14:15:00Z",
+    "status": "dead"
+  },
+  {
+    "Id": 12,
+    "title": "YouTube",
+    "url": "https://youtube.com",
+    "folder": "Entertainment",
+    "dateAdded": "2024-01-03T17:00:00Z",
+    "status": "active"
+  },
+  {
+    "Id": 13,
+    "title": "Figma",
+    "url": "https://figma.com",
+    "folder": "Design",
+    "dateAdded": "2024-01-18T09:40:00Z",
+    "status": "active"
+  },
+  {
+    "Id": 14,
+    "title": "Figma Design Tool",
+    "url": "https://www.figma.com",
+    "folder": "Tools",
+    "dateAdded": "2024-02-05T11:25:00Z",
+    "status": "duplicate"
+  },
+  {
+    "Id": 15,
+    "title": "Expired Tutorial Site",
+    "url": "https://oldtutorials-expired.com",
+    "folder": "Learning",
+    "dateAdded": "2023-07-30T13:20:00Z",
+    "status": "dead"
+  },
+  {
+    "Id": 16,
+    "title": "Notion",
+    "url": "https://notion.so",
+    "folder": "Productivity",
+    "dateAdded": "2024-01-22T16:30:00Z",
+    "status": "active"
+  },
+  {
+    "Id": 17,
+    "title": "CodePen",
+    "url": "https://codepen.io",
+    "folder": "Development",
+    "dateAdded": "2024-01-14T10:15:00Z",
+    "status": "active"
+  },
+  {
+    "Id": 18,
+    "title": "CodePen - Online Code Editor",
+    "url": "https://codepen.io/",
+    "folder": "Tools",
+    "dateAdded": "2024-02-15T14:50:00Z",
+    "status": "duplicate"
+  },
+  {
+    "Id": 19,
+    "title": "Shut Down Startup",
+    "url": "https://deadstartup-gone.com",
+    "folder": "Startups",
+    "dateAdded": "2023-06-10T12:00:00Z",
+    "status": "dead"
+  },
+  {
+    "Id": 20,
+    "title": "Dribbble",
+    "url": "https://dribbble.com",
+    "folder": "Design",
+    "dateAdded": "2024-01-28T15:10:00Z",
+    "status": "active"
+  },
+  {
+    "Id": 21,
+    "title": "ChatGPT",
+    "url": "https://chat.openai.com",
+    "folder": "AI Tools",
+    "dateAdded": "2024-02-01T09:20:00Z",
+    "status": "active"
+  },
+  {
+    "Id": 22,
+    "title": "Old Forum Site",
+    "url": "https://oldforum-discontinued.com",
+    "folder": "Communities",
+    "dateAdded": "2023-05-15T11:30:00Z",
+    "status": "dead"
+  },
+  {
+    "Id": 23,
+    "title": "Vercel",
+    "url": "https://vercel.com",
+    "folder": "Development",
+    "dateAdded": "2024-01-30T13:45:00Z",
+    "status": "active"
+  },
+  {
+    "Id": 24,
+    "title": "Vercel Deployment Platform",
+    "url": "https://vercel.com/",
+    "folder": "Hosting",
+    "dateAdded": "2024-02-20T10:00:00Z",
+    "status": "duplicate"
+  },
+  {
+    "Id": 25,
+    "title": "Defunct Tech Blog",
+    "url": "https://techblog-offline.com",
+    "folder": "Tech News",
+    "dateAdded": "2023-11-05T16:20:00Z",
+    "status": "dead"
+  }
+]
