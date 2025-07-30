@@ -191,12 +191,132 @@
     "dateAdded": "2024-02-20T10:00:00Z",
     "status": "duplicate"
   },
-  {
+{
     "Id": 25,
     "title": "Defunct Tech Blog",
     "url": "https://techblog-offline.com",
     "folder": "Tech News",
     "dateAdded": "2023-11-05T16:20:00Z",
     "status": "dead"
+  },
+  {
+    "Id": 26,
+    "title": "Twitter",
+    "url": "https://twitter.com",
+    "folder": "Social Media",
+    "dateAdded": "2024-01-10T08:15:00Z",
+    "status": "active"
+  },
+  {
+    "Id": 27,
+    "title": "LinkedIn",
+    "url": "https://linkedin.com",
+    "folder": "Social Media",
+    "dateAdded": "2024-01-12T09:30:00Z",
+    "status": "active"
+  },
+  {
+    "Id": 28,
+    "title": "Docker Hub",
+    "url": "https://hub.docker.com",
+    "folder": "Development",
+    "dateAdded": "2024-01-25T14:45:00Z",
+    "status": "active"
+  },
+  {
+    "Id": 29,
+    "title": "AWS Console",
+    "url": "https://aws.amazon.com/console",
+    "folder": "Cloud",
+    "dateAdded": "2024-02-03T11:20:00Z",
+    "status": "active"
+  },
+  {
+    "Id": 30,
+    "title": "Old Social Network",
+    "url": "https://myspace-clone-dead.com",
+    "folder": "Social Media",
+    "dateAdded": "2023-04-20T15:30:00Z",
+    "status": "dead"
+  },
+  {
+    "Id": 31,
+    "title": "Stripe Dashboard",
+    "url": "https://dashboard.stripe.com",
+    "folder": "Finance",
+    "dateAdded": "2024-01-28T10:00:00Z",
+    "status": "active"
+  },
+  {
+    "Id": 32,
+    "title": "PayPal",
+    "url": "https://paypal.com",
+    "folder": "Finance",
+    "dateAdded": "2024-02-10T12:15:00Z",
+    "status": "active"
+  },
+  {
+    "Id": 33,
+    "title": "npm Registry",
+    "url": "https://npmjs.com",
+    "folder": "Development",
+    "dateAdded": "2024-01-15T16:40:00Z",
+    "status": "active"
+  },
+  {
+    "Id": 34,
+    "title": "NPM Package Manager",
+    "url": "https://www.npmjs.com/",
+    "folder": "Tools",
+    "dateAdded": "2024-02-08T13:25:00Z",
+    "status": "duplicate"
+  },
+  {
+    "Id": 35,
+    "title": "Bitbucket",
+    "url": "https://bitbucket.org",
+    "folder": "Development",
+    "dateAdded": "2024-01-20T14:20:00Z",
+    "status": "active"
+  },
+  {
+    "Id": 36,
+    "title": "Trello",
+    "url": "https://trello.com",
+    "folder": "Productivity",
+    "dateAdded": "2024-01-18T09:10:00Z",
+    "status": "active"
+  },
+  {
+    "Id": 37,
+    "title": "Shuttered Project Tool",
+    "url": "https://project-tool-closed.com",
+    "folder": "Productivity",
+    "dateAdded": "2023-08-25T11:45:00Z",
+    "status": "dead"
+  },
+  {
+    "Id": 38,
+    "title": "Medium",
+    "url": "https://medium.com",
+    "folder": "Reading",
+    "dateAdded": "2024-02-12T15:50:00Z",
+    "status": "active"
+  },
+  {
+    "Id": 39,
+    "title": "Amazon",
+    "url": "https://amazon.com",
+    "folder": "Shopping",
+    "dateAdded": "2024-01-08T17:30:00Z",
+    "status": "active"
+  },
+  {
+    "Id": 40,
+    "title": "Etsy Marketplace",
+    "url": "https://etsy.com",
+    "folder": "Shopping",
+    "dateAdded": "2024-02-15T12:05:00Z",
+    "status": "active"
   }
 ]
