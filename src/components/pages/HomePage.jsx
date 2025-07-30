@@ -40,15 +40,15 @@ const HomePage = () => {
     setShowReview(false);
   };
 
-  const handleRemoveBookmark = async (bookmarkId) => {
+const handleRemoveBookmark = async (bookmarkId) => {
     try {
       await bookmarkService.removeBookmark(bookmarkId);
       
       // Update scan result to remove the bookmark
       setScanResult(prev => ({
         ...prev,
-        duplicates: prev.duplicates.filter(b => b.id !== bookmarkId),
-        deadLinks: prev.deadLinks.filter(b => b.id !== bookmarkId)
+        duplicates: prev.duplicates.filter(b => b.Id !== bookmarkId),
+        deadLinks: prev.deadLinks.filter(b => b.Id !== bookmarkId)
       }));
       
       toast.success("Bookmark removed successfully!");
@@ -62,10 +62,9 @@ const HomePage = () => {
     if (!scanResult) return;
 
     const allIssueIds = [
-      ...scanResult.duplicates.map(b => b.id),
-      ...scanResult.deadLinks.map(b => b.id)
+      ...scanResult.duplicates.map(b => b.Id),
+      ...scanResult.deadLinks.map(b => b.Id)
     ];
-
     if (allIssueIds.length === 0) return;
 
     try {
@@ -84,12 +83,11 @@ const HomePage = () => {
     }
   };
 
-  const handleRemoveAllType = async (type) => {
+const handleRemoveAllType = async (type) => {
     if (!scanResult) return;
 
     const bookmarksToRemove = type === "duplicates" ? scanResult.duplicates : scanResult.deadLinks;
-    const ids = bookmarksToRemove.map(b => b.id);
-
+    const ids = bookmarksToRemove.map(b => b.Id);
     if (ids.length === 0) return;
 
     try {

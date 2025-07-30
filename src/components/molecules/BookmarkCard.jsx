@@ -60,12 +60,12 @@ const BookmarkCard = ({ bookmark, onRemove, showRemove = true }) => {
             </div>
           </div>
           
-          {showRemove && (
+{showRemove && (
             <Button
               variant="ghost"
               size="sm"
               icon="Trash2"
-              onClick={() => onRemove(bookmark.id)}
+              onClick={() => onRemove(bookmark.Id)}
               className="ml-2 text-error hover:bg-error/10"
             />
           )}
