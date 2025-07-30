@@ -1,16 +1,26 @@
 import { useState, useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { toast } from "react-toastify";
 import { motion, AnimatePresence } from "framer-motion";
 import ChatInterface from "@/components/organisms/ChatInterface";
 import ReviewPanel from "@/components/organisms/ReviewPanel";
 import { bookmarkService } from "@/services/api/bookmarkService";
+import { 
+  startGenerating, 
+  setSuggestions, 
+  startApplying, 
+  applyComplete, 
+  setBundlingError 
+} from "@/store/bundlingSlice";
 
 const HomePage = () => {
+  const dispatch = useDispatch();
+  const { suggestions: bundlingSuggestions, isGenerating: isBundling, isApplying } = useSelector(state => state.bundling);
+  
   const [scanResult, setScanResult] = useState(null);
   const [isScanning, setIsScanning] = useState(false);
   const [scanProgress, setScanProgress] = useState(null);
   const [showReview, setShowReview] = useState(false);
-
   const handleStartScan = async () => {
     setIsScanning(true);
     setScanResult(null);
@@ -105,11 +115,60 @@ const handleRemoveAllType = async (type) => {
     }
   };
 
-  const handleSkip = () => {
+const handleSkip = () => {
     // Just acknowledge the skip, no action needed
     toast.info("Scan results saved. You can review them anytime.");
   };
 
+  const handleGenerateBundlingSuggestions = async () => {
+    dispatch(startGenerating());
+    
+    try {
+      const suggestions = await bookmarkService.generateBundlingSuggestions();
+      dispatch(setSuggestions(suggestions));
+      
+      if (suggestions.folders && suggestions.folders.length > 0) {
+        toast.success(`Found ${suggestions.folders.length} folder suggestions for ${suggestions.suggestedCount} bookmarks!`);
+      } else {
+        toast.info(suggestions.message || "No bundling suggestions found - your bookmarks are already well organized!");
+      }
+    } catch (error) {
+      dispatch(setBundlingError(error.message));
+      toast.error("Failed to generate bundling suggestions");
+    }
+  };
+
+  const handleApplyBundlingSuggestions = async (suggestions) => {
+    dispatch(startApplying());
+    
+    try {
+      const result = await bookmarkService.applyBundlingSuggestions(suggestions);
+      dispatch(applyComplete(result));
+      
+      if (result.success) {
+        // Refresh scan result if it exists to show updated folder information
+        if (scanResult) {
+          const refreshedBookmarks = await bookmarkService.getAll();
+          // Update any existing scan results with new folder information
+          setScanResult(prev => ({
+            ...prev,
+            // Refresh the bookmark data while preserving scan categorization
+            duplicates: prev.duplicates.map(bookmark => {
+              const updated = refreshedBookmarks.find(b => b.Id === bookmark.Id);
+              return updated || bookmark;
+            }),
+            deadLinks: prev.deadLinks.map(bookmark => {
+              const updated = refreshedBookmarks.find(b => b.Id === bookmark.Id);
+              return updated || bookmark;
+            })
+          }));
+        }
+      }
+    } catch (error) {
+      dispatch(setBundlingError(error.message));
+      toast.error("Failed to apply bundling suggestions");
+    }
+  };
   return (
     <div className="min-h-screen bg-gradient-to-br from-background to-slate-100 p-4">
       <div className="max-w-7xl mx-auto">
@@ -132,7 +191,7 @@ const handleRemoveAllType = async (type) => {
             animate={{ opacity: 1, x: 0 }}
             transition={{ delay: 0.1 }}
           >
-            <ChatInterface
+<ChatInterface
               onStartScan={handleStartScan}
               scanResult={scanResult}
               isScanning={isScanning}
@@ -140,6 +199,11 @@ const handleRemoveAllType = async (type) => {
               onShowReview={handleShowReview}
               onRemoveAll={handleRemoveAll}
               onSkip={handleSkip}
+              bundlingSuggestions={bundlingSuggestions}
+              isBundling={isBundling}
+              isApplying={isApplying}
+              onGenerateBundling={handleGenerateBundlingSuggestions}
+              onApplyBundling={handleApplyBundlingSuggestions}
             />
           </motion.div>
 

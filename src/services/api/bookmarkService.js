@@ -389,10 +389,191 @@ class BookmarkService {
       }
       return null;
     }
-  }
+}
 
   async delete(id) {
     return this.removeBookmark(id);
+  }
+
+  async generateBundlingSuggestions() {
+    try {
+      const bookmarks = await this.getAll();
+      
+      if (!bookmarks || bookmarks.length === 0) {
+        return { folders: [], totalBookmarks: 0 };
+      }
+
+      // Filter out bookmarks that already have meaningful folders
+      const unbundledBookmarks = bookmarks.filter(bookmark => 
+        !bookmark.folder || 
+        bookmark.folder === 'Bookmarks Bar' || 
+        bookmark.folder === 'Other Bookmarks' ||
+        bookmark.folder === ''
+      );
+
+      if (unbundledBookmarks.length === 0) {
+        return { folders: [], totalBookmarks: bookmarks.length, message: 'All bookmarks are already organized!' };
+      }
+
+      // Define folder patterns based on common bookmark themes
+      const folderPatterns = {
+        'Development Tools': {
+          keywords: ['github', 'stackoverflow', 'codepen', 'npm', 'docker', 'aws', 'vercel', 'bitbucket'],
+          domains: ['github.com', 'stackoverflow.com', 'codepen.io', 'npmjs.com', 'hub.docker.com', 'vercel.com', 'bitbucket.org'],
+          titles: ['dev', 'code', 'programming', 'development', 'api', 'docs', 'documentation']
+        },
+        'Social Media': {
+          keywords: ['twitter', 'linkedin', 'facebook', 'instagram', 'social'],
+          domains: ['twitter.com', 'linkedin.com', 'facebook.com', 'instagram.com'],
+          titles: ['social', 'network', 'community']
+        },
+        'Design Resources': {
+          keywords: ['figma', 'dribbble', 'behance', 'design', 'ui', 'ux'],
+          domains: ['figma.com', 'dribbble.com', 'behance.net'],
+          titles: ['design', 'figma', 'ui', 'ux', 'prototype', 'mockup']
+        },
+        'Finance & Business': {
+          keywords: ['stripe', 'paypal', 'finance', 'business', 'payment'],
+          domains: ['stripe.com', 'paypal.com', 'dashboard.stripe.com'],
+          titles: ['finance', 'business', 'payment', 'money', 'bank']
+        },
+        'Productivity': {
+          keywords: ['notion', 'trello', 'productivity', 'todo', 'task'],
+          domains: ['notion.so', 'trello.com'],
+          titles: ['productivity', 'task', 'project', 'organize', 'todo']
+        },
+        'Entertainment': {
+          keywords: ['youtube', 'netflix', 'entertainment', 'video', 'music'],
+          domains: ['youtube.com', 'netflix.com', 'spotify.com'],
+          titles: ['entertainment', 'video', 'music', 'movie', 'show']
+        },
+        'Shopping': {
+          keywords: ['amazon', 'etsy', 'shop', 'store', 'buy'],
+          domains: ['amazon.com', 'etsy.com', 'ebay.com'],
+          titles: ['shop', 'store', 'buy', 'purchase', 'marketplace']
+        },
+        'Learning & Resources': {
+          keywords: ['mdn', 'mozilla', 'tutorial', 'learn', 'course', 'education'],
+          domains: ['developer.mozilla.org', 'coursera.org', 'udemy.com'],
+          titles: ['learn', 'tutorial', 'course', 'education', 'guide', 'docs']
+        }
+      };
+
+      const suggestions = {};
+
+      // Analyze each unbundled bookmark
+      unbundledBookmarks.forEach(bookmark => {
+        const title = (bookmark.title || '').toLowerCase();
+        const url = (bookmark.url || '').toLowerCase();
+        
+        for (const [folderName, pattern] of Object.entries(folderPatterns)) {
+          let score = 0;
+          
+          // Check domain matches
+          pattern.domains.forEach(domain => {
+            if (url.includes(domain)) score += 3;
+          });
+          
+          // Check keyword matches in URL
+          pattern.keywords.forEach(keyword => {
+            if (url.includes(keyword)) score += 2;
+          });
+          
+          // Check title matches
+          pattern.titles.forEach(titleKeyword => {
+            if (title.includes(titleKeyword)) score += 2;
+          });
+          
+          // If score is high enough, suggest this folder
+          if (score >= 2) {
+            if (!suggestions[folderName]) {
+              suggestions[folderName] = [];
+            }
+            suggestions[folderName].push({
+              ...bookmark,
+              matchScore: score
+            });
+          }
+        }
+      });
+
+      // Convert to array format and sort by bookmark count
+      const folderSuggestions = Object.entries(suggestions)
+        .map(([name, bookmarks]) => ({
+          name,
+          bookmarks: bookmarks.sort((a, b) => b.matchScore - a.matchScore),
+          count: bookmarks.length
+        }))
+        .sort((a, b) => b.count - a.count);
+
+      return {
+        folders: folderSuggestions,
+        totalBookmarks: bookmarks.length,
+        unbundledCount: unbundledBookmarks.length,
+        suggestedCount: folderSuggestions.reduce((sum, folder) => sum + folder.count, 0)
+      };
+    } catch (error) {
+      console.error("Error generating bundling suggestions:", error.message);
+      toast.error("Failed to generate bundling suggestions");
+      throw error;
+    }
+  }
+
+  async applyBundlingSuggestions(suggestions) {
+    try {
+      if (!suggestions || !suggestions.folders || suggestions.folders.length === 0) {
+        toast.info("No bundling suggestions to apply");
+        return { success: true, updated: 0 };
+      }
+
+      let totalUpdated = 0;
+      const updatePromises = [];
+
+      // Process each folder suggestion
+      for (const folder of suggestions.folders) {
+        // Update each bookmark in this folder
+        for (const bookmark of folder.bookmarks) {
+          const updatePromise = this.update(bookmark.Id, {
+            folder: folder.name
+          }).then(result => {
+            if (result) {
+              totalUpdated++;
+              return result;
+            }
+            return null;
+          }).catch(error => {
+            console.error(`Failed to update bookmark ${bookmark.Id}:`, error);
+            return null;
+          });
+          
+          updatePromises.push(updatePromise);
+        }
+      }
+
+      // Wait for all updates to complete
+      const results = await Promise.all(updatePromises);
+      const successfulUpdates = results.filter(result => result !== null);
+
+      if (successfulUpdates.length > 0) {
+        toast.success(`Successfully organized ${successfulUpdates.length} bookmarks into ${suggestions.folders.length} folders!`);
+      }
+
+      if (totalUpdated < updatePromises.length) {
+        const failed = updatePromises.length - successfulUpdates.length;
+        toast.warning(`${failed} bookmarks could not be updated`);
+      }
+
+      return {
+        success: true,
+        updated: successfulUpdates.length,
+        failed: updatePromises.length - successfulUpdates.length,
+        totalAttempted: updatePromises.length
+      };
+    } catch (error) {
+      console.error("Error applying bundling suggestions:", error.message);
+      toast.error("Failed to apply bundling suggestions");
+      throw error;
+    }
   }
 }
 
