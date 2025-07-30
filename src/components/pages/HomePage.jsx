@@ -4,6 +4,7 @@ import { toast } from "react-toastify";
 import { motion, AnimatePresence } from "framer-motion";
 import ChatInterface from "@/components/organisms/ChatInterface";
 import ReviewPanel from "@/components/organisms/ReviewPanel";
+import BookmarksSidebar from "@/components/organisms/BookmarksSidebar";
 import { bookmarkService } from "@/services/api/bookmarkService";
 import { 
   startGenerating, 
@@ -21,6 +22,49 @@ const HomePage = () => {
   const [isScanning, setIsScanning] = useState(false);
   const [scanProgress, setScanProgress] = useState(null);
   const [showReview, setShowReview] = useState(false);
+  const [bookmarks, setBookmarks] = useState([]);
+  const [bookmarksLoading, setBookmarksLoading] = useState(true);
+  const [bookmarksError, setBookmarksError] = useState(null);
+
+  // Load bookmarks on component mount
+  useEffect(() => {
+    const loadBookmarks = async () => {
+      try {
+        setBookmarksLoading(true);
+        setBookmarksError(null);
+        const result = await bookmarkService.getAll();
+        setBookmarks(result || []);
+      } catch (error) {
+        console.error('Error loading bookmarks:', error.message);
+        setBookmarksError('Failed to load bookmarks');
+        setBookmarks([]);
+      } finally {
+        setBookmarksLoading(false);
+      }
+    };
+
+    loadBookmarks();
+  }, []);
+
+  const handleRetryBookmarks = () => {
+    const loadBookmarks = async () => {
+      try {
+        setBookmarksLoading(true);
+        setBookmarksError(null);
+        const result = await bookmarkService.getAll();
+        setBookmarks(result || []);
+      } catch (error) {
+        console.error('Error loading bookmarks:', error.message);
+        setBookmarksError('Failed to load bookmarks');
+        setBookmarks([]);
+      } finally {
+        setBookmarksLoading(false);
+      }
+    };
+
+    loadBookmarks();
+  };
+
   const handleStartScan = async () => {
     setIsScanning(true);
     setScanResult(null);
@@ -212,40 +256,50 @@ const handleSkip = () => {
             animate={{ opacity: 1, x: 0 }}
             transition={{ delay: 0.2 }}
           >
-            <AnimatePresence mode="wait">
-              {showReview && scanResult ? (
-                <ReviewPanel
-                  key="review"
-                  scanResult={scanResult}
-                  onRemoveBookmark={handleRemoveBookmark}
-                  onClose={handleCloseReview}
-                  onRemoveAllType={handleRemoveAllType}
-                />
-              ) : (
-                <motion.div
-                  key="placeholder"
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  exit={{ opacity: 0 }}
-                  className="h-[600px] flex items-center justify-center"
-                >
-                  <div className="text-center space-y-4">
-                    <div className="w-24 h-24 bg-gradient-to-br from-primary/10 to-secondary/10 rounded-full flex items-center justify-center mx-auto">
-                      <div className="w-12 h-12 bg-gradient-to-br from-primary to-secondary rounded-full flex items-center justify-center">
-                        <span className="text-white font-bold text-lg">LK</span>
+<div className="space-y-4">
+              <AnimatePresence mode="wait">
+                {showReview && scanResult ? (
+                  <ReviewPanel
+                    key="review"
+                    scanResult={scanResult}
+                    onRemoveBookmark={handleRemoveBookmark}
+                    onClose={handleCloseReview}
+                    onRemoveAllType={handleRemoveAllType}
+                  />
+                ) : (
+                  <motion.div
+                    key="placeholder"
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    exit={{ opacity: 0 }}
+                    className="h-[400px] flex items-center justify-center bg-white rounded-xl shadow-sm border border-slate-200"
+                  >
+                    <div className="text-center space-y-4">
+                      <div className="w-24 h-24 bg-gradient-to-br from-primary/10 to-secondary/10 rounded-full flex items-center justify-center mx-auto">
+                        <div className="w-12 h-12 bg-gradient-to-br from-primary to-secondary rounded-full flex items-center justify-center">
+                          <span className="text-white font-bold text-lg">LK</span>
+                        </div>
                       </div>
+                      <h3 className="text-xl font-semibold text-slate-800">
+                        Ready to Clean Your Bookmarks?
+                      </h3>
+                      <p className="text-slate-600 max-w-md">
+                        Start a scan to find duplicate bookmarks and dead links. 
+                        The review panel will appear here once the scan is complete.
+                      </p>
                     </div>
-                    <h3 className="text-xl font-semibold text-slate-800">
-                      Ready to Clean Your Bookmarks?
-                    </h3>
-                    <p className="text-slate-600 max-w-md">
-                      Start a scan to find duplicate bookmarks and dead links. 
-                      The review panel will appear here once the scan is complete.
-                    </p>
-                  </div>
-                </motion.div>
-              )}
-            </AnimatePresence>
+                  </motion.div>
+                )}
+              </AnimatePresence>
+              
+              {/* Bookmarks Sidebar */}
+              <BookmarksSidebar
+                bookmarks={bookmarks}
+                loading={bookmarksLoading}
+                error={bookmarksError}
+                onRetry={handleRetryBookmarks}
+              />
+            </div>
           </motion.div>
         </div>
       </div>
